@@ -1,21 +1,27 @@
-public abstract class Entity implements IPrintable {
+public class Entity implements IPrintable {
     protected int hitPoints;
     protected final int maxHitPoints;
     protected String name;
+    protected final int damage;
 
-    protected Entity(String name, int maxHitPoints) {
+    protected Entity(String name, int maxHitPoints, int damage) {
         this.name = name;
         this.hitPoints = maxHitPoints;
         this.maxHitPoints = maxHitPoints;
+        this.damage = damage;
     }
 
-    protected Entity(String name, int hitPoints, int maxHitPoints) {
-        this(name, maxHitPoints);
+    protected Entity(String name, int hitPoints, int maxHitPoints, int damage) {
+        this(name, maxHitPoints, damage);
         this.hitPoints = hitPoints;
     }
 
     public int getHP() {
         return hitPoints;
+    }
+
+    public int getDamage() {
+        return damage;
     }
 
     public boolean looseHP(int hitPoints) {
@@ -32,5 +38,7 @@ public abstract class Entity implements IPrintable {
     }
 
     @Override
-    public abstract String toString();
+    public String toString() {
+        return name + " HP: " + hitPoints + "/" + maxHitPoints + " (damage: " + damage;
+    }
 }
