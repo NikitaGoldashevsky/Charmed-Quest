@@ -6,6 +6,10 @@ public class Weapon extends Item {
         this.damage = damage;
     }
 
+    public int getDamage() {
+        return damage;
+    }
+
     @Override
     public String toString() {
         return name + "(damage: " + damage + ")";

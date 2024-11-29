@@ -1,13 +1,17 @@
 public class Main {
+    static boolean gameIsRunning = true;
+
+    enum GameLocation {
+        START, FOREST, CAVE, TOWER, VILLAGE, END
+    };
+
     public static void main(String[] args) {
         handleGame();
     }
 
     private static void handleGame() {
-        boolean gameIsRunning = true;
-        enum GameLocation {
-            START, FOREST, CAVE, TOWER, VILLAGE, END
-        };
+        Player player = new Player(4, 10, 3);
+        Player.Inventory inventory = player.getInventory();
 
         GameLocation currentLocation = GameLocation.START;
         Entity currentEnemy;
@@ -21,7 +25,8 @@ public class Main {
                 case FOREST:
                     System.out.println("You are in a forest.");
                     currentEnemy = new Entity("Rat", 3, 1);
-                    System.out.println("The rat is attacking you!");
+                    System.out.println("The rat is approaching you!");
+                    handleFight(player, currentEnemy);
                     break;
                 case CAVE:
                     System.out.println("You are in a cave.");
@@ -36,8 +41,14 @@ public class Main {
                     break;
                 case END:
                     System.out.println("You are in the end.");
+                    gameIsRunning = false;
                     break;
             }
         }
+        System.out.println("The game ended!");
+    }
+
+    private static void handleFight(Player player, Entity enemy) {
+        return;
     }
 }
