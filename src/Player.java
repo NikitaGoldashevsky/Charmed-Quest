@@ -8,6 +8,10 @@ public class Player extends Entity {
         inventory = new Inventory();
     }
 
+    public void restoreHealth(int restoreAmount) {
+        hitPoints += restoreAmount;
+    }
+
     @Override
     public int getDamage() {
         return super.getDamage() + inventory.getWeapon().getDamage();
