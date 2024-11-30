@@ -47,6 +47,10 @@ public class Player extends Entity {
             }
         }
 
+        public void removeItemAt(int index) {
+            items.remove(index);
+        }
+
         public Item getItemAt(int index) {
             return items.get(index);
         }
