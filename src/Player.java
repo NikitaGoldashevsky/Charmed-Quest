@@ -35,7 +35,12 @@ public class Player extends Entity {
         }
 
         public void addItem(Item item) {
-            items.add(item);
+            if (item instanceof Weapon) {
+                weapon = (Weapon)item;
+            }
+            else {
+                items.add(item);
+            }
         }
 
         public Item getItemAt(int index) {
