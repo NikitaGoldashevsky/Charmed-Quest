@@ -9,7 +9,7 @@ public class Player extends Entity {
     }
 
     public void restoreHealth(int restoreAmount) {
-        hitPoints += restoreAmount;
+        hitPoints = Math.min(hitPoints + restoreAmount, maxHitPoints);
     }
 
     @Override
