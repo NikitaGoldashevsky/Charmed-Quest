@@ -79,4 +79,63 @@ public class Main {
         target.looseHP(attackDamage);
         System.out.println(target.toString());
     }
+
+    private static void handleInput(Player player) {
+        Scanner scanner = new Scanner(System.in);
+        String userInput;
+
+        do {
+            System.out.print("\n> ");
+            userInput = scanner.nextLine();
+
+            if (userInput.matches("^use [1-9][0-9]*")) {
+                int itemIndex = Integer.parseInt(userInput.substring(4)) - 1;
+                if (player.getInventory().itemsCount() > itemIndex) {
+                    Item item = player.getInventory().getItemAt(itemIndex);
+                    if (item instanceof HealthRestorer) {
+                        player.restoreHealth(((HealthRestorer) item).restoreAmount);
+                        System.out.printf("You used %s! Your health is now %d/%d. \n", item.getName(), player.getHP(), player.getMaxHP());
+                        player.getInventory().removeItemAt(itemIndex);
+                    }
+                }
+                else {
+                    System.out.printf("There is no item by index %d in your inventory\n", itemIndex);
+                }
+                continue;
+            }
+
+            switch (userInput) {
+                case "me":
+                    System.out.printf("You are at the %s.\n", currentLocation);
+                    System.out.println(player);
+                    break;
+                case "inv":
+                    System.out.println("Your weapon: " + player.getInventory().getWeapon());
+
+                    if (player.getInventory().itemsCount() == 0) {
+                        System.out.println("You have nothing in the inventory");
+                    }
+                    else {
+                        System.out.println("Your inventory:");
+                        for (int i = 0; i < player.getInventory().itemsCount(); i++) {
+                            System.out.printf("\t%d - %s\n", i+1, player.getInventory().getItemAt(i));
+                        }
+                    }
+                    break;
+                case "help":
+                    System.out.println("Commands:");
+                    System.out.println("\t'me' - show your state and location");
+                    System.out.println("\t'inv' - show inventory");
+                    System.out.println("\t'use <1..n>' - use an item by index 'n' from your inventory");
+                    System.out.println("\t'go' - move to the next location");
+                    break;
+                case "go":
+                    break;
+                default:
+                    System.out.println("Unknown command! Type 'help' to view list of commands.");
+                    break;
+            }
+        }
+        while (!userInput.equals("go"));
+    }
 }
