@@ -4,7 +4,7 @@ public class Player extends Entity {
     private final Inventory inventory;
 
     public Player(int hitPoints, int maxHitPoints, int damage) {
-        super("Player", hitPoints, maxHitPoints, 0);
+        super("Hero", hitPoints, maxHitPoints, 0);
         inventory = new Inventory();
     }
 

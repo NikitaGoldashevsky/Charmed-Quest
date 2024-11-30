@@ -28,9 +28,8 @@ public class Entity implements IPrintable {
         return damage;
     }
 
-    public boolean looseHP(int hitPoints) {
-        this.hitPoints -=  hitPoints;
-        return isAlive();
+    public void looseHP(int hitPoints) {
+        this.hitPoints = Math.max(this.hitPoints - hitPoints, 0);
     }
 
     public boolean isAlive() {
