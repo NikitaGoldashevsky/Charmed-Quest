@@ -1,4 +1,5 @@
 import java.util.Scanner;
+import java.util.Random;
 
 public class Main {
     static boolean gameIsRunning = true;
@@ -191,5 +192,10 @@ public class Main {
             System.out.println("The sleep was interrupted.");
             Thread.currentThread().interrupt();
         }
+    }
+
+    public static boolean randomChance(int chance) {
+        Random random = new Random();
+        return random.nextInt(100) < chance;
     }
 }
