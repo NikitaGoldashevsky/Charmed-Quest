@@ -1,9 +1,12 @@
+import java.util.Scanner;
+
 public class Main {
     static boolean gameIsRunning = true;
 
     enum GameLocation {
         START, FOREST, CAVE, TOWER, VILLAGE, END
     };
+    static GameLocation currentLocation = GameLocation.START;
 
     public static void main(String[] args) {
         handleGame();
@@ -11,22 +14,35 @@ public class Main {
 
     private static void handleGame() {
         Player player = new Player(4, 10, 3);
-        Player.Inventory inventory = player.getInventory();
+        player.getInventory().addItem(new Weapon("Heavy stick", 1));
+        player.getInventory().addItem(new Food("Apple", 2));
+        player.getInventory().addItem(new Food("Apple", 2));
 
-        GameLocation currentLocation = GameLocation.START;
         Entity currentEnemy;
 
         while (gameIsRunning) {
             switch (currentLocation) {
                 case START:
-                    System.out.println("You are in the start location.");
+                    System.out.println("You are in the start location!");
+                    System.out.println("Type 'go' to move to the next location.");
+
+                    handleInput(player);
+
                     currentLocation = GameLocation.FOREST;
                     break;
                 case FOREST:
                     System.out.println("You are in a forest.");
+
                     currentEnemy = new Entity("Rat", 3, 1);
-                    System.out.println("The rat is approaching you!");
+                    System.out.printf("The %s is approaching you!\n", currentEnemy.getName());
                     handleFight(player, currentEnemy);
+
+                    // Scripted scenario
+                    System.out.println("\nUnfortunately, your health is low!\n" +
+                            "Type 'inv' to take a look at your inventory.\n" +
+                            "You may find something healthy there!");
+                    handleInput(player);
+
                     break;
                 case CAVE:
                     System.out.println("You are in a cave.");
@@ -53,8 +69,8 @@ public class Main {
         System.out.println();
 
         System.out.println("The fight begins!");
-        System.out.println(player.toString());
-        System.out.println(enemy.toString());
+        System.out.println(player);
+        System.out.println(enemy);
 
         while (true) {
             handleAttack(player, enemy);
@@ -77,7 +93,7 @@ public class Main {
         int attackDamage = attacker.getDamage();
         System.out.printf("\n%s attacks %s with %d damage!\n", attacker.getName(), target.getName(), attackDamage);
         target.looseHP(attackDamage);
-        System.out.println(target.toString());
+        System.out.println(target);
     }
 
     private static void handleInput(Player player) {
