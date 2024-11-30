@@ -14,7 +14,7 @@ public class Main {
 
     private static void handleGame() {
         Player player = new Player(4, 10, 3);
-        player.getInventory().addItem(new Weapon("Heavy stick", 1));
+        player.getInventory().addItem(new Weapon("Heavy stick", 10));
         player.getInventory().addItem(new Food("Apple", 2));
         player.getInventory().addItem(new Food("Apple", 2));
 
@@ -24,7 +24,7 @@ public class Main {
             switch (currentLocation) {
                 case START:
                     System.out.println("You are in the start location!");
-                    System.out.println("Type 'go' to move to the next location.");
+                    System.out.println("Type 'go' to move forward.");
 
                     handleInput(player);
 
@@ -43,14 +43,37 @@ public class Main {
                             "You may find something healthy there!");
                     handleInput(player);
 
+                    currentLocation = GameLocation.CAVE;
                     break;
                 case CAVE:
-                    System.out.println("You are in a cave.");
-                    currentEnemy = new Entity("Spider", 3, 1);
+                    System.out.println("You are in a cave.\n" +
+                            "Type 'go' to face the enemies.");
+                    handleInput(player);
+
+                    currentEnemy = new Entity("Spider", 4, 2);
+                    System.out.printf("The %s is approaching you!\n", currentEnemy.getName());
+                    handleFight(player, currentEnemy);
+
+                    System.out.println("\nThat was a tough fight!\n" +
+                            "You may go now or take your time around here.");
+                    handleInput(player);
+
+                    currentLocation = GameLocation.TOWER;
                     break;
                 case TOWER:
-                    System.out.println("You are in the Tower.");
-                    currentEnemy = new Entity("Wizard", 3, 1);
+                    System.out.println("You are in the Tower.\n" +
+                            "Type 'go' to face the enemies.");
+                    handleInput(player);
+
+                    currentEnemy = new Entity("Wizard", 3, 7);
+                    System.out.printf("The %s is approaching you!\n", currentEnemy.getName());
+                    handleFight(player, currentEnemy);
+
+                    System.out.println("\nThat was a tough fight!\n" +
+                            "You may go now or take your time around here.");
+                    handleInput(player);
+
+                    currentLocation = GameLocation.END;
                     break;
                 case VILLAGE:
                     System.out.println("You are in a village.");
