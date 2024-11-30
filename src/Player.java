@@ -13,6 +13,11 @@ public class Player extends Entity {
         return super.getDamage() + inventory.getWeapon().getDamage();
     }
 
+    @Override
+    public String toString() {
+        return String.format("%s (HP: %d/%d, damage: %d)", getName(), getHP(), getMaxHP(), getDamage());
+    }
+
     public Inventory getInventory() {
         return inventory;
     }

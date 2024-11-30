@@ -12,6 +12,6 @@ public abstract class HealthRestorer extends Item implements IHealthRestoring {
 
     @Override
     public String toString() {
-        return name + " (restores " + restoreAmount + " HP)";
+        return String.format("%s (restores %d HP)", name, restoreAmount);
     }
 }
