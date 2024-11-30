@@ -109,6 +109,14 @@ public class Main {
 
         if (!enemy.isAlive()) {
             System.out.printf("\n%s has been defeated!\n", enemy.getName());
+            Item item = enemy.getLoot();
+            if (item != null) {
+                System.out.printf("You looted %s from the defeated %s!\n", item.getName(), enemy.getName());
+                player.getInventory().addItem(item);
+            }
+            else {
+                System.out.printf("Unfortunately, the defeated %s was stingy with loot.\n", enemy.getName());
+            }
         }
         else if (!player.isAlive()) {
             System.out.println("\nYou have been defeated!");
