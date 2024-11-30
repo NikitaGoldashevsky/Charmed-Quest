@@ -20,6 +20,10 @@ public class Entity implements IPrintable {
         return hitPoints;
     }
 
+    public int getMaxHP() {
+        return maxHitPoints;
+    }
+
     public int getDamage() {
         return damage;
     }
@@ -39,6 +43,6 @@ public class Entity implements IPrintable {
 
     @Override
     public String toString() {
-        return name + " HP: " + hitPoints + "/" + maxHitPoints + " (damage: " + damage;
+        return String.format("%s (HP: %d/%d, damage: %d)", name, hitPoints, maxHitPoints, damage);
     }
 }
