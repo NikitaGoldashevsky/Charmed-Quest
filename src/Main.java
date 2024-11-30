@@ -16,10 +16,9 @@ public class Main {
     private static void handleGame() {
         Player player = new Player(4, 10, 3);
         player.getInventory().addItem(new Weapon("Heavy stick", 10));
-        player.getInventory().addItem(new Food("Apple", 2));
-        player.getInventory().addItem(new Food("Apple", 2));
+        player.getInventory().addItem(new Food("Apple", 3));
 
-        Entity currentEnemy;
+        Enemy currentEnemy;
 
         while (gameIsRunning) {
             switch (currentLocation) {
@@ -34,7 +33,7 @@ public class Main {
                 case FOREST:
                     System.out.println("You are in a forest.");
 
-                    currentEnemy = new Entity("Rat", 3, 1);
+                    currentEnemy = new Enemy("Rat", 2, 1, 1);
                     System.out.printf("The %s is approaching you!\n", currentEnemy.getName());
                     handleFight(player, currentEnemy);
 
@@ -51,7 +50,7 @@ public class Main {
                             "Type 'go' to face the enemies.");
                     handleInput(player);
 
-                    currentEnemy = new Entity("Spider", 4, 2);
+                    currentEnemy = new Enemy("Spider", 4, 2, 2);
                     System.out.printf("The %s is approaching you!\n", currentEnemy.getName());
                     handleFight(player, currentEnemy);
 
@@ -66,7 +65,7 @@ public class Main {
                             "Type 'go' to face the enemies.");
                     handleInput(player);
 
-                    currentEnemy = new Entity("Wizard", 3, 7);
+                    currentEnemy = new Enemy("Wizard", 3, 7, 3);
                     System.out.printf("The %s is approaching you!\n", currentEnemy.getName());
                     handleFight(player, currentEnemy);
 
@@ -88,7 +87,7 @@ public class Main {
         System.out.println("The game ended!");
     }
 
-    private static void handleFight(Player player, Entity enemy) {
+    private static void handleFight(Player player, Enemy enemy) {
         sleep();
 
         Scanner scanner = new Scanner(System.in);
