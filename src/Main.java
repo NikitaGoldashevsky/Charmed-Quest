@@ -65,27 +65,33 @@ public class Main {
     }
 
     private static void handleFight(Player player, Entity enemy) {
+        sleep();
+
         Scanner scanner = new Scanner(System.in);
         System.out.println();
 
         System.out.println("The fight begins!");
         System.out.println(player);
         System.out.println(enemy);
+        sleep();
 
         while (true) {
             handleAttack(player, enemy);
             if (!enemy.isAlive()) break;
+            sleep();
             handleAttack(enemy, player);
             if (!player.isAlive()) break;
+            sleep();
         }
 
         if (!enemy.isAlive()) {
             System.out.printf("\n%s has been defeated!\n", enemy.getName());
         }
         else if (!player.isAlive()) {
-            System.out.println("\nYou were defeated!");
+            System.out.println("\nYou have been defeated!");
             gameIsRunning = false;
         }
+        sleep();
         return;
     }
 
@@ -153,5 +159,14 @@ public class Main {
             }
         }
         while (!userInput.equals("go"));
+    }
+
+    private static void sleep() {
+        try {
+            Thread.sleep(1500);
+        } catch (InterruptedException e) {
+            System.out.println("The sleep was interrupted.");
+            Thread.currentThread().interrupt();
+        }
     }
 }
