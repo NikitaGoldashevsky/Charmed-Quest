@@ -49,6 +49,34 @@ public class Main {
     }
 
     private static void handleFight(Player player, Entity enemy) {
+        Scanner scanner = new Scanner(System.in);
+        System.out.println();
+
+        System.out.println("The fight begins!");
+        System.out.println(player.toString());
+        System.out.println(enemy.toString());
+
+        while (true) {
+            handleAttack(player, enemy);
+            if (!enemy.isAlive()) break;
+            handleAttack(enemy, player);
+            if (!player.isAlive()) break;
+        }
+
+        if (!enemy.isAlive()) {
+            System.out.printf("\n%s has been defeated!\n", enemy.getName());
+        }
+        else if (!player.isAlive()) {
+            System.out.println("\nYou were defeated!");
+            gameIsRunning = false;
+        }
         return;
+    }
+
+    private static void handleAttack(Entity attacker, Entity target) {
+        int attackDamage = attacker.getDamage();
+        System.out.printf("\n%s attacks %s with %d damage!\n", attacker.getName(), target.getName(), attackDamage);
+        target.looseHP(attackDamage);
+        System.out.println(target.toString());
     }
 }
