@@ -255,6 +255,15 @@ public class Main {
         while (!userInput.equals("go") && !userInput.equals("stay"));
     }
 
+    private static void sleep(int seconds) {
+        try {
+            Thread.sleep(seconds * 1000L);
+        } catch (InterruptedException e) {
+            System.out.println("The sleep was interrupted.");
+            Thread.currentThread().interrupt();
+        }
+    }
+
     private static void sleep() {
         try {
             Thread.sleep(1500);
