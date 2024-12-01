@@ -15,9 +15,21 @@ public class Main {
     );
 
     enum GameLocation {
-        START, FOREST, CAVE, TOWER, VILLAGE, END
-    };
-    static GameLocation currentLocation = GameLocation.START;
+        START, FOREST, CAVE, TOWER, VILLAGE, END;
+
+        public GameLocation next() {
+            int nextIndex = (this.ordinal() + 1) % GameLocation.values().length;
+            return GameLocation.values()[nextIndex];
+        }
+    }
+
+    private static class MutableGameLocation {
+        public GameLocation location;
+
+        MutableGameLocation(GameLocation location) {
+            this.location = location;
+        }
+    }
 
     public static void main(String[] args) {
         handleGame();
@@ -25,77 +37,53 @@ public class Main {
 
     private static void handleGame() {
         Player player = new Player(4, 10, 3);
-        player.getInventory().addItem(new Weapon("Heavy stick", 10));
+        player.getInventory().addItem(new Weapon("Heavy stick", 2));
         player.getInventory().addItem(new Food("Apple", 3));
 
+        MutableGameLocation currentLocation = new MutableGameLocation(GameLocation.START);
         Enemy currentEnemy;
 
-        while (gameIsRunning) {
-            switch (currentLocation) {
-                case START:
-                    System.out.println("You are in the start location!");
-                    System.out.println("Type 'go' to move forward.");
+            while (gameIsRunning) {
+                switch (currentLocation.location) {
+                    case START:
+                        System.out.println("You are in the start location!");
+                        System.out.println("Type 'go' to move forward.");
 
-                    handleInput(player);
-
-                    currentLocation = GameLocation.FOREST;
-                    break;
-                case FOREST:
-                    System.out.println("You are in a forest.");
-
-                    currentEnemy = new Enemy("Rat", 2, 1, 1);
-                    System.out.printf("The %s is approaching you!\n", currentEnemy.getName());
-                    handleFight(player, currentEnemy);
-                        currentEnemy = (randomChance(60) ? enemyPresets.get("rat") : enemyPresets.get("goblin"));
-
-                    // Scripted scenario
-                    System.out.println("\nUnfortunately, your health is low!\n" +
-                            "Type 'inv' to take a look at your inventory.\n" +
-                            "You may find something healthy there!");
-                    handleInput(player);
-
-                    currentLocation = GameLocation.CAVE;
-                    break;
-                case CAVE:
-                    System.out.println("You are in a cave.\n" +
-                            "Type 'go' to face the enemies.");
-                    handleInput(player);
-
-                    currentEnemy = new Enemy("Spider", 4, 2, 2);
-                    System.out.printf("The %s is approaching you!\n", currentEnemy.getName());
-                    handleFight(player, currentEnemy);
-                        currentEnemy = (randomChance(70) ? enemyPresets.get("spider") : enemyPresets.get("ogre"));
-
-                    System.out.println("\nThat was a tough fight!\n" +
-                            "You may go now or take your time around here.");
-                    handleInput(player);
-
-                    currentLocation = GameLocation.TOWER;
-                    break;
-                case TOWER:
-                    System.out.println("You are in the Tower.\n" +
-                            "Type 'go' to face the enemies.");
-                    handleInput(player);
-
-                    currentEnemy = new Enemy("Wizard", 3, 7, 3);
-                    System.out.printf("The %s is approaching you!\n", currentEnemy.getName());
-                    handleFight(player, currentEnemy);
-                        currentEnemy = (randomChance(80) ? enemyPresets.get("wizard") : enemyPresets.get("dragon"));
-
-                    System.out.println("\nThat was a tough fight!\n" +
-                            "You may go now or take your time around here.");
-                    handleInput(player);
-
-                    currentLocation = GameLocation.END;
-                    break;
-                case VILLAGE:
-                    System.out.println("You are in a village.");
-                    break;
-                case END:
-                    System.out.println("You are in the end.");
-                    gameIsRunning = false;
-                    break;
                         handleInput(player, currentLocation);
+                        break;
+                    case FOREST:
+                        currentEnemy = (randomChance(60) ? enemyPresets.get("rat") : enemyPresets.get("goblin"));
+                        System.out.printf("The %s is approaching you!\n", currentEnemy.getName());
+                        handleFight(player, currentEnemy);
+
+                        System.out.println("\nThat was a tough fight!\n" +
+                                "You may go now or take your time around here.");
+                        handleInput(player, currentLocation);
+                        break;
+                    case CAVE:
+                        currentEnemy = (randomChance(70) ? enemyPresets.get("spider") : enemyPresets.get("ogre"));
+                        System.out.printf("The %s is approaching you!\n", currentEnemy.getName());
+                        handleFight(player, currentEnemy);
+
+                        System.out.println("\nThat was a tough fight!\n" +
+                                "You may go now or take your time around here.");
+                        handleInput(player, currentLocation);
+                        break;
+                    case TOWER:
+                        currentEnemy = (randomChance(80) ? enemyPresets.get("wizard") : enemyPresets.get("dragon"));
+                        System.out.printf("The %s is approaching you!\n", currentEnemy.getName());
+                        handleFight(player, currentEnemy);
+
+                        System.out.println("\nThat was a tough fight!\n" +
+                                "You may go now or take your time around here.");
+                        handleInput(player, currentLocation);
+                        break;
+                    case VILLAGE:
+                        handleInput(player, currentLocation);
+                        break;
+                    case END:
+                        gameIsRunning = false;
+                        break;
             }
         }
         System.out.println("The game ended!");
@@ -189,7 +177,7 @@ public class Main {
 
             switch (userInput) {
                 case "me":
-                    System.out.printf("You are at the %s.\n", currentLocation);
+                    System.out.printf("You are at the %s.\n", currentLocation.location.toString().toLowerCase());
                     System.out.println(player);
                     break;
                 case "inv":
@@ -211,15 +199,21 @@ public class Main {
                     System.out.println("\t'inv' - show your inventory");
                     System.out.println("\t'use <1..n>' - use an item by index 'n' from your inventory");
                     System.out.println("\t'go' - move to the next location");
+                    System.out.println("\t'stay' - stay in the current location");
                     break;
                 case "go":
+                    currentLocation.location = currentLocation.location.next();
+                    System.out.printf("You moved to the %s.\n", currentLocation.location.toString().toLowerCase());
+                    break;
+                case "stay":
+                    System.out.printf("You stayed at the %s.\n", currentLocation.location.toString().toLowerCase());
                     break;
                 default:
                     System.out.println("Unknown command! Type 'help' to view list of commands.");
                     break;
             }
         }
-        while (!userInput.equals("go"));
+        while (!userInput.equals("go") && !userInput.equals("stay"));
     }
 
     private static void sleep() {
