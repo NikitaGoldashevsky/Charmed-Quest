@@ -12,6 +12,10 @@ public class Player extends Entity {
         hitPoints = Math.min(hitPoints + restoreAmount, maxHitPoints);
     }
 
+    public void increaseDamage(int increaseAmount) {
+        damage = damage + increaseAmount;
+    }
+
     @Override
     public int getDamage() {
         return super.getDamage() + inventory.getWeapon().getDamage();
@@ -19,7 +23,7 @@ public class Player extends Entity {
 
     @Override
     public String toString() {
-        return String.format("%s (HP: %d/%d, damage: %d)", getName(), getHP(), getMaxHP(), getDamage());
+        return String.format("%s (HP: %d/%d, power: %d, overall damage: %d)", getName(), getHP(), getMaxHP(), damage, getDamage());
     }
 
     public Inventory getInventory() {

@@ -160,9 +160,16 @@ public class Main {
                 int itemIndex = Integer.parseInt(userInput.substring(4)) - 1;
                 if (player.getInventory().itemsCount() > itemIndex) {
                     Item item = player.getInventory().getItemAt(itemIndex);
-                    if (item instanceof HealthRestorer) {
+                    if (item instanceof Food) {
                         player.restoreHealth(((HealthRestorer) item).restoreAmount);
-                        System.out.printf("You used %s! Your health is now %d/%d. \n", item.getName(), player.getHP(), player.getMaxHP());
+                        System.out.printf("You ate %s! Your health is now %d/%d. \n", item.getName(), player.getHP(), player.getMaxHP());
+                        player.getInventory().removeItemAt(itemIndex);
+                    }
+                    else if (item instanceof Potion) {
+                        player.restoreHealth(((HealthRestorer) item).getRestoreAmount());
+                        player.increaseDamage(((Potion)item).getDamageIncrease());
+                        System.out.printf("You drank %s! Your health is now %d/%d.\nAnd your power increased by %d!\n",
+                                item.getName(), player.getHP(), player.getMaxHP(), ((Potion)item).getDamageIncrease());
                         player.getInventory().removeItemAt(itemIndex);
                     }
                 }

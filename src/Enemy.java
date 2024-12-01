@@ -36,7 +36,7 @@ public class Enemy extends Entity {
                 }
             case 5:
                 if (Main.randomChance(50)) {
-                    item = new Weapon("Empowered Elixir", 8);
+                    item = new Potion("Empowered Elixir", 5, 2);
                     break;
                 }
             case 4:
@@ -46,7 +46,7 @@ public class Enemy extends Entity {
                 }
             case 3:
                 if (Main.randomChance(60)) {
-                    item = new Potion("Elixir of Wellbeing", 5);
+                    item = new Potion("Elixir of Wellbeing", 3, 1);
                     break;
                 }
             case 2:
