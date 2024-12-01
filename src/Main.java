@@ -61,8 +61,40 @@ public class Main {
     }
 
     private static void handleLocation(Player player, GameLocation location) {
+        if (location.firstEntrance) {
+            switch (location.location) {
+                case START:
+                    System.out.println("You wake up in a dense forest.\n" +
+                            "What are you doing here? Why do you have a heavy stick in your hand?\n" +
+                            "And why does your back hurts so much?\n" +
+                            "There is no one around to answer your questions.\n" +
+                            "Your improvised weapon makes you believe you can get out of here alive.\n" +
+                            "Type 'go' to try to get out of here.");
+                    break;
+                case FOREST:
+                    System.out.println("You slowly make your way through the woods\n" +
+                            "Sooner or later the endless trees all around will drive you crazy.\n" +
+                            "Suddenly, you see something in the shadows.\n" +
+                            "You grip the stick tighter than ever before.\n");
+                    sleep(5);
+                    break;
+                case CAVE:
+                    System.out.println("You are in a dangerous cave!\n" +
+                            "Who knows what horrors you are going to face here?\n");
+                    sleep(3);
+                    break;
+                case TOWER:
+                    System.out.println("You have come to entrance of the tallest tower you have ever seen!\n" +
+                            "You see a giant creature sitting at the top of it.\n" +
+                            "May it be a dragon? It's scary to even think about it.\n");
+                    sleep(4);
+                    break;
+            }
+        }
+
         if (location.location == GameLocation.Location.START) {
             handleInput(player, location);
+            return;
         }
 
         int locationOrdinal = location.location.ordinal();
@@ -81,7 +113,8 @@ public class Main {
 
         if (gameIsRunning) {
             System.out.println("\nThat was a tough fight!\n" +
-                    "You may go now or take your time around here.");
+                    "You may go now or take your time around here.\n" +
+                    "Type 'help' to see what you can do.");
             handleInput(player, location);
         }
     }
