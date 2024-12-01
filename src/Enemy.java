@@ -19,7 +19,7 @@ public class Enemy extends Entity {
         Item item = null;
         switch (level) {
             case 6:
-                if (Main.randomChance(30)) {
+                if (Main.randomChance(20)) {
                     item = new Weapon("Ten-Meter Sword", 7);
                     break;
                 }

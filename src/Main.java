@@ -11,7 +11,7 @@ public class Main {
         "spider", new Enemy("Spider", 4, 2, 3),
         "ogre", new Enemy("Ogre", 8, 3, 4),
         "wizard", new Enemy("Wizard", 5, 7, 5),
-        "dragon", new Enemy("Dragon", 10, 6, 6)
+        "dragon", new Enemy("Dragon", 10, 4, 6)
     );
 
     enum GameLocation {
@@ -52,7 +52,7 @@ public class Main {
                         handleInput(player, currentLocation);
                         break;
                     case FOREST:
-                        currentEnemy = (randomChance(60) ? enemyPresets.get("rat") : enemyPresets.get("goblin"));
+                        currentEnemy = (randomChance(60) ? new Enemy(enemyPresets.get("rat")) : new Enemy(enemyPresets.get("goblin")));
                         System.out.printf("The %s is approaching you!\n", currentEnemy.getName());
                         handleFight(player, currentEnemy);
 
@@ -61,7 +61,7 @@ public class Main {
                         handleInput(player, currentLocation);
                         break;
                     case CAVE:
-                        currentEnemy = (randomChance(70) ? enemyPresets.get("spider") : enemyPresets.get("ogre"));
+                        currentEnemy = (randomChance(70) ? new Enemy(enemyPresets.get("spider")) : new Enemy(enemyPresets.get("ogre")));
                         System.out.printf("The %s is approaching you!\n", currentEnemy.getName());
                         handleFight(player, currentEnemy);
 
@@ -70,7 +70,7 @@ public class Main {
                         handleInput(player, currentLocation);
                         break;
                     case TOWER:
-                        currentEnemy = (randomChance(80) ? enemyPresets.get("wizard") : enemyPresets.get("dragon"));
+                        currentEnemy = (randomChance(80) ? new Enemy(enemyPresets.get("wizard")) : new Enemy(enemyPresets.get("dragon")));
                         System.out.printf("The %s is approaching you!\n", currentEnemy.getName());
                         handleFight(player, currentEnemy);
 
