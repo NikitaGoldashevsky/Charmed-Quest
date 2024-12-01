@@ -3,15 +3,15 @@ import java.util.Scanner;
 import java.util.Random;
 
 public class Main {
-    static boolean gameIsRunning = true;
+    private static boolean gameIsRunning = true;
 
-    Map<String, Enemy> enemyPresets = Map.of(
+    private final static Map<String, Enemy> enemyPresets = Map.of(
         "rat", new Enemy("Rat", 2, 1, 1),
-        "goblin", new Enemy("Goblin", 3, 2, 1),
-        "spider", new Enemy("Spider", 4, 2, 2),
-        "ogre", new Enemy("Ogre", 8, 3, 2),
-        "wizard", new Enemy("Wizard", 5, 7, 3),
-        "dragon", new Enemy("Dragon", 10, 6, 3)
+        "goblin", new Enemy("Goblin", 3, 2, 2),
+        "spider", new Enemy("Spider", 4, 2, 3),
+        "ogre", new Enemy("Ogre", 8, 3, 4),
+        "wizard", new Enemy("Wizard", 5, 7, 5),
+        "dragon", new Enemy("Dragon", 10, 6, 6)
     );
 
     enum GameLocation {
@@ -46,6 +46,7 @@ public class Main {
                     currentEnemy = new Enemy("Rat", 2, 1, 1);
                     System.out.printf("The %s is approaching you!\n", currentEnemy.getName());
                     handleFight(player, currentEnemy);
+                        currentEnemy = (randomChance(60) ? enemyPresets.get("rat") : enemyPresets.get("goblin"));
 
                     // Scripted scenario
                     System.out.println("\nUnfortunately, your health is low!\n" +
@@ -63,6 +64,7 @@ public class Main {
                     currentEnemy = new Enemy("Spider", 4, 2, 2);
                     System.out.printf("The %s is approaching you!\n", currentEnemy.getName());
                     handleFight(player, currentEnemy);
+                        currentEnemy = (randomChance(70) ? enemyPresets.get("spider") : enemyPresets.get("ogre"));
 
                     System.out.println("\nThat was a tough fight!\n" +
                             "You may go now or take your time around here.");
@@ -78,6 +80,7 @@ public class Main {
                     currentEnemy = new Enemy("Wizard", 3, 7, 3);
                     System.out.printf("The %s is approaching you!\n", currentEnemy.getName());
                     handleFight(player, currentEnemy);
+                        currentEnemy = (randomChance(80) ? enemyPresets.get("wizard") : enemyPresets.get("dragon"));
 
                     System.out.println("\nThat was a tough fight!\n" +
                             "You may go now or take your time around here.");
@@ -92,6 +95,7 @@ public class Main {
                     System.out.println("You are in the end.");
                     gameIsRunning = false;
                     break;
+                        handleInput(player, currentLocation);
             }
         }
         System.out.println("The game ended!");
@@ -100,10 +104,7 @@ public class Main {
     private static void handleFight(Player player, Enemy enemy) {
         sleep();
 
-        Scanner scanner = new Scanner(System.in);
-        System.out.println();
-
-        System.out.println("The fight begins!");
+        System.out.println("\nThe fight begins!");
         System.out.println(player);
         System.out.println(enemy);
         sleep();
@@ -119,14 +120,7 @@ public class Main {
 
         if (!enemy.isAlive()) {
             System.out.printf("\n%s has been defeated!\n", enemy.getName());
-            Item item = enemy.getLoot();
-            if (item != null) {
-                System.out.printf("You looted %s from the defeated %s!\n", item.getName(), enemy.getName());
-                player.getInventory().addItem(item);
-            }
-            else {
-                System.out.printf("Unfortunately, the defeated %s was stingy with loot.\n", enemy.getName());
-            }
+            handleLoot(enemy, player);
         }
         else if (!player.isAlive()) {
             System.out.println("\nYou have been defeated!");
@@ -143,7 +137,33 @@ public class Main {
         System.out.println(target);
     }
 
-    private static void handleInput(Player player) {
+    private static void handleLoot(Enemy enemy, Player player) {
+        Item item = enemy.getLoot();
+        if (item != null) {
+            System.out.printf("You looted %s from the defeated %s!\n", item.getName(), enemy.getName());
+
+            if (item instanceof Weapon) {
+                if (item.getName().equals(player.getInventory().getWeapon().getName())) {
+                    System.out.printf("You already have %s as your weapon.\n", item.getName());
+                }
+                else if (((Weapon) item).getDamage() > player.getInventory().getWeapon().getDamage()) {
+                    player.getInventory().addItem(item);
+                    System.out.printf("%s is your new weapon!\n", item);
+                }
+                else {
+                    System.out.printf("%s is worse than your current weapon.\n", item);
+                }
+            }
+            else {
+                player.getInventory().addItem(item);
+            }
+        }
+        else {
+            System.out.printf("Unfortunately, the defeated %s was stingy with loot.\n", enemy.getName());
+        }
+    }
+
+    private static void handleInput(Player player, MutableGameLocation currentLocation) {
         Scanner scanner = new Scanner(System.in);
         String userInput;
 

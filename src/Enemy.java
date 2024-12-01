@@ -18,14 +18,29 @@ public class Enemy extends Entity {
 
         Item item = null;
         switch (level) {
-            case 3:
+            case 6:
                 if (Main.randomChance(30)) {
-                    item = new Weapon("The Great Sword", 7);
+                    item = new Weapon("Ten-Meter Sword", 7);
+                    break;
+                }
+            case 5:
+                if (Main.randomChance(50)) {
+                    item = new Weapon("Empowered Elixir", 8);
+                    break;
+                }
+            case 4:
+                if (Main.randomChance(30)) {
+                    item = new Weapon("The Great Spear", 7);
+                    break;
+                }
+            case 3:
+                if (Main.randomChance(60)) {
+                    item = new Potion("Elixir of Wellbeing", 5);
                     break;
                 }
             case 2:
-                if (Main.randomChance(50)) {
-                    item = new Potion("Elixir of Wellbeing", 5);
+                if (Main.randomChance(40)) {
+                    item = new Weapon("Rusty Sword", 4);
                     break;
                 }
             case 1:
