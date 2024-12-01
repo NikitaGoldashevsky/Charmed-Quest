@@ -1,8 +1,8 @@
 public class Entity implements IPrintable {
     protected int hitPoints;
-    protected final int maxHitPoints;
-    protected final String name;
-    protected final int damage;
+    protected int maxHitPoints;
+    protected String name;
+    protected int damage;
 
     protected Entity(String name, int maxHitPoints, int damage) {
         this.name = name;

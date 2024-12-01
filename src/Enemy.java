@@ -1,11 +1,16 @@
 import java.util.Random;
 
 public class Enemy extends Entity {
-    private final int level;
+    private int level;
 
-    Enemy(String name, int maxHitPoints, int damage, int level) {
+    public Enemy(String name, int maxHitPoints, int damage, int level) {
         super(name, maxHitPoints, damage);
         this.level = level;
+    }
+
+    public Enemy(Enemy other) {
+        super(other.name, other.maxHitPoints, other.damage);
+        this.level = other.level;
     }
 
     Item getLoot() {
