@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 import java.util.Map;
 import java.util.Scanner;
 import java.util.Random;
@@ -6,27 +7,28 @@ public class Main {
     private static boolean gameIsRunning = true;
 
     private final static Map<String, Enemy> enemyPresets = Map.of(
-        "rat", new Enemy("Rat", 2, 1, 1),
-        "goblin", new Enemy("Goblin", 3, 2, 2),
-        "spider", new Enemy("Spider", 4, 2, 3),
-        "ogre", new Enemy("Ogre", 8, 3, 4),
-        "wizard", new Enemy("Wizard", 5, 7, 5),
-        "dragon", new Enemy("Dragon", 10, 4, 6)
+        "rat", new Enemy("Rat", 2, 1, 1, 1),
+        "goblin", new Enemy("Goblin", 3, 2, 1, 2),
+        "spider", new Enemy("Spider", 4, 2, 2, 3),
+        "ogre", new Enemy("Ogre", 8, 3, 2, 4),
+        "wizard", new Enemy("Wizard", 5, 7, 3, 5),
+        "dragon", new Enemy("Dragon", 10, 4, 3, 6)
     );
 
-    enum GameLocation {
-        START, FOREST, CAVE, TOWER, VILLAGE, END;
+    private static class GameLocation {
+        public enum Location {
+            START, FOREST, CAVE, TOWER, VILLAGE, END;
 
-        public GameLocation next() {
-            int nextIndex = (this.ordinal() + 1) % GameLocation.values().length;
-            return GameLocation.values()[nextIndex];
+            public Location next() {
+                int nextIndex = (this.ordinal() + 1) % Location.values().length;
+                return Location.values()[nextIndex];
+            }
         }
-    }
 
-    private static class MutableGameLocation {
-        public GameLocation location;
+        public Location location;
+        public boolean firstEntrance = true;
 
-        MutableGameLocation(GameLocation location) {
+        GameLocation(Location location) {
             this.location = location;
         }
     }
@@ -40,53 +42,48 @@ public class Main {
         player.getInventory().addItem(new Weapon("Heavy stick", 2));
         player.getInventory().addItem(new Food("Apple", 3));
 
-        MutableGameLocation currentLocation = new MutableGameLocation(GameLocation.START);
-        Enemy currentEnemy;
+        GameLocation currentLocation = new GameLocation(GameLocation.Location.START);
 
-            while (gameIsRunning) {
-                switch (currentLocation.location) {
-                    case START:
-                        System.out.println("You are in the start location!");
-                        System.out.println("Type 'go' to move forward.");
-
-                        handleInput(player, currentLocation);
-                        break;
-                    case FOREST:
-                        currentEnemy = (randomChance(60) ? new Enemy(enemyPresets.get("rat")) : new Enemy(enemyPresets.get("goblin")));
-                        System.out.printf("The %s is approaching you!\n", currentEnemy.getName());
-                        handleFight(player, currentEnemy);
-
-                        System.out.println("\nThat was a tough fight!\n" +
-                                "You may go now or take your time around here.");
-                        handleInput(player, currentLocation);
-                        break;
-                    case CAVE:
-                        currentEnemy = (randomChance(70) ? new Enemy(enemyPresets.get("spider")) : new Enemy(enemyPresets.get("ogre")));
-                        System.out.printf("The %s is approaching you!\n", currentEnemy.getName());
-                        handleFight(player, currentEnemy);
-
-                        System.out.println("\nThat was a tough fight!\n" +
-                                "You may go now or take your time around here.");
-                        handleInput(player, currentLocation);
-                        break;
-                    case TOWER:
-                        currentEnemy = (randomChance(80) ? new Enemy(enemyPresets.get("wizard")) : new Enemy(enemyPresets.get("dragon")));
-                        System.out.printf("The %s is approaching you!\n", currentEnemy.getName());
-                        handleFight(player, currentEnemy);
-
-                        System.out.println("\nThat was a tough fight!\n" +
-                                "You may go now or take your time around here.");
-                        handleInput(player, currentLocation);
-                        break;
-                    case VILLAGE:
-                        handleInput(player, currentLocation);
-                        break;
-                    case END:
-                        gameIsRunning = false;
-                        break;
+        while (gameIsRunning) {
+            switch (currentLocation.location) {
+                case VILLAGE:
+                    handleInput(player, currentLocation);
+                    break;
+                case END:
+                    gameIsRunning = false;
+                    break;
+                default:
+                    handleLocation(player, currentLocation);
+                    break;
             }
         }
         System.out.println("The game ended!");
+    }
+
+    private static void handleLocation(Player player, GameLocation location) {
+        if (location.location == GameLocation.Location.START) {
+            handleInput(player, location);
+        }
+
+        int locationOrdinal = location.location.ordinal();
+        ArrayList<Enemy> locationEnemies = new ArrayList<>();
+
+        for (Enemy enemyPreset : enemyPresets.values()) {
+            if (enemyPreset.getLocation() == locationOrdinal) {
+                locationEnemies.add(new Enemy(enemyPreset));
+            }
+        }
+        int enemyChance = 50 + locationOrdinal * 10;
+        Enemy currentEnemy = new Enemy(locationEnemies.get( randomChance(enemyChance) ? 0 : 1));
+
+        System.out.printf("The %s is approaching you!\n", currentEnemy.getName());
+        handleFight(player, currentEnemy);
+
+        if (gameIsRunning) {
+            System.out.println("\nThat was a tough fight!\n" +
+                    "You may go now or take your time around here.");
+            handleInput(player, location);
+        }
     }
 
     private static void handleFight(Player player, Enemy enemy) {
@@ -151,7 +148,7 @@ public class Main {
         }
     }
 
-    private static void handleInput(Player player, MutableGameLocation currentLocation) {
+    private static void handleInput(Player player, GameLocation currentLocation) {
         Scanner scanner = new Scanner(System.in);
         String userInput;
 
@@ -204,12 +201,14 @@ public class Main {
                 case "go":
                     currentLocation.location = currentLocation.location.next();
                     System.out.printf("You moved to the %s.\n", currentLocation.location.toString().toLowerCase());
+                    currentLocation.firstEntrance = true;
                     break;
                 case "stay":
                     System.out.printf("You stayed at the %s.\n", currentLocation.location.toString().toLowerCase());
+                    currentLocation.firstEntrance = false;
                     break;
                 default:
-                    System.out.println("Unknown command! Type 'help' to view list of commands.");
+                    System.out.println("Unknown command! Type 'help' to view the list of commands.");
                     break;
             }
         }
