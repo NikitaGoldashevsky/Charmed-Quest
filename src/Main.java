@@ -1,8 +1,18 @@
+import java.util.Map;
 import java.util.Scanner;
 import java.util.Random;
 
 public class Main {
     static boolean gameIsRunning = true;
+
+    Map<String, Enemy> enemyPresets = Map.of(
+        "rat", new Enemy("Rat", 2, 1, 1),
+        "goblin", new Enemy("Goblin", 3, 2, 1),
+        "spider", new Enemy("Spider", 4, 2, 2),
+        "ogre", new Enemy("Ogre", 8, 3, 2),
+        "wizard", new Enemy("Wizard", 5, 7, 3),
+        "dragon", new Enemy("Dragon", 10, 6, 3)
+    );
 
     enum GameLocation {
         START, FOREST, CAVE, TOWER, VILLAGE, END
@@ -178,7 +188,7 @@ public class Main {
                 case "help":
                     System.out.println("Commands:");
                     System.out.println("\t'me' - show your state and location");
-                    System.out.println("\t'inv' - show inventory");
+                    System.out.println("\t'inv' - show your inventory");
                     System.out.println("\t'use <1..n>' - use an item by index 'n' from your inventory");
                     System.out.println("\t'go' - move to the next location");
                     break;
