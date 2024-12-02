@@ -64,29 +64,33 @@ public class Main {
         if (location.firstEntrance) {
             switch (location.location) {
                 case START:
-                    System.out.println("You wake up in a dense forest.\n" +
-                            "What are you doing here? Why do you have a heavy stick in your hand?\n" +
-                            "And why does your back hurts so much?\n" +
-                            "There is no one around to answer your questions.\n" +
-                            "Your improvised weapon makes you believe you can get out of here alive.\n" +
-                            "Type 'go' to try to get out of here.");
+                    System.out.println("""
+                            You wake up in a dense forest.
+                            What are you doing here? Why do you have a heavy stick in your hand?
+                            And why does your back hurts so much?
+                            There is no one around to answer your questions.
+                            Your improvised weapon makes you believe you can get out of here alive.
+                            Type 'go' to try to get out of here.""");
                     break;
                 case FOREST:
-                    System.out.println("You slowly make your way through the woods\n" +
-                            "Sooner or later the endless trees all around will drive you crazy.\n" +
-                            "Suddenly, you see something in the shadows.\n" +
-                            "You grip the stick tighter than ever before.\n");
+                    System.out.println("""
+                            You slowly make your way through the woods
+                            Sooner or later the endless trees all around will drive you crazy.
+                            Suddenly, you see something in the shadows.
+                            You grip the stick tighter than ever before.""");
                     sleep(5);
                     break;
                 case CAVE:
-                    System.out.println("You are in a dangerous cave!\n" +
-                            "Who knows what horrors you are going to face here?\n");
+                    System.out.println("""
+                            You are in a dangerous cave!
+                            Who knows what horrors you are going to face here?""");
                     sleep(3);
                     break;
                 case TOWER:
-                    System.out.println("You have come to entrance of the tallest tower you have ever seen!\n" +
-                            "You see a giant creature sitting at the top of it.\n" +
-                            "May it be a dragon? It's scary to even think about it.\n");
+                    System.out.println("""
+                            You have come to entrance of the tallest tower you have ever seen!
+                            You see a giant creature sitting at the top of it.
+                            May it be a dragon? It's scary to even think about it.""");
                     sleep(4);
                     break;
             }
@@ -112,9 +116,10 @@ public class Main {
         handleFight(player, currentEnemy);
 
         if (gameIsRunning) {
-            System.out.println("\nThat was a tough fight!\n" +
-                    "You may go now or take your time around here.\n" +
-                    "Type 'help' to see what you can do.");
+            System.out.println("""
+                    That was a tough fight!
+                    You may go now or take your time around here.
+                    Type 'help' to see what you can do.""");
             handleInput(player, location);
         }
     }
@@ -179,6 +184,7 @@ public class Main {
         else {
             System.out.printf("Unfortunately, the defeated %s was stingy with loot.\n", enemy.getName());
         }
+        System.out.println();
     }
 
     private static void handleInput(Player player, GameLocation currentLocation) {
@@ -231,12 +237,13 @@ public class Main {
                     }
                     break;
                 case "help":
-                    System.out.println("Commands:");
-                    System.out.println("\t'me' - show your state and location");
-                    System.out.println("\t'inv' - show your inventory");
-                    System.out.println("\t'use <1..n>' - use an item by index 'n' from your inventory");
-                    System.out.println("\t'go' - move to the next location");
-                    System.out.println("\t'stay' - stay in the current location");
+                    System.out.println("""
+                            Commands:
+                            \t'me' - show your state and location
+                            \t'inv' - show your inventory
+                            \tuse <1..n>' - use an item by index 'n' from your inventory
+                            \t'go' - move to the next location
+                            \t'stay' - stay in the current location""");
                     break;
                 case "go":
                     currentLocation.location = currentLocation.location.next();
