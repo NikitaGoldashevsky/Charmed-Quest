@@ -1,10 +1,13 @@
-import java.util.ArrayList;
-import java.util.Map;
-import java.util.Scanner;
-import java.util.Random;
+import java.util.*;
 
 public class Main {
     private static boolean gameIsRunning = true;
+    private static final int VILLAGE_LOCATION_CHANCE = 35;
+    private static final List<Item> VILLAGE_GIFTS = List.of(
+        new Food("Strawberry Pie", 4),
+        new Food("Meatier Stew", 5),
+        new Potion("Chamomile Beer", 1, 3 )
+    );
 
     private final static Map<String, Enemy> enemyPresets = Map.of(
         "rat", new Enemy("Rat", 2, 1, 1, 1),
@@ -17,16 +20,31 @@ public class Main {
 
     private static class GameLocation {
         public enum Location {
-            START, FOREST, CAVE, TOWER, VILLAGE, END;
-
-            public Location next() {
-                int nextIndex = (this.ordinal() + 1) % Location.values().length;
-                return Location.values()[nextIndex];
-            }
+            START, FOREST, CAVE, TOWER, END, VILLAGE;
         }
+
+        private Location lastLocation;
 
         public Location location;
         public boolean firstEntrance = true;
+
+        public void moveNext() {
+            if (location == Location.VILLAGE) {
+                location = lastLocation;
+                firstEntrance = false;
+                lastLocation = Location.VILLAGE;
+            }
+            else {
+                if (lastLocation != Location.VILLAGE && randomChance(VILLAGE_LOCATION_CHANCE)) {
+                    lastLocation = location;
+                    location = Location.VILLAGE;
+                } else {
+                    lastLocation = location;
+                    int nextIndex = (location.ordinal() + 1) % Location.values().length;
+                    location = Location.values()[nextIndex];
+                }
+            }
+        }
 
         GameLocation(Location location) {
             this.location = location;
@@ -47,7 +65,7 @@ public class Main {
         while (gameIsRunning) {
             switch (currentLocation.location) {
                 case VILLAGE:
-                    handleInput(player, currentLocation);
+                    handleLocation(player, currentLocation);
                     break;
                 case END:
                     gameIsRunning = false;
@@ -93,11 +111,34 @@ public class Main {
                             May it be a dragon? It's scary to even think about it.""");
                     sleep(4);
                     break;
+                case VILLAGE:
+                    System.out.println("""
+                            Your path has led you to a peaceful village!
+                            Friendly human faces seem like a miracle after the hardship you have gone through.
+                            The village elder is happy to offer you some food and a bed to rest for a while.""");
+                    sleep(4);
+                    break;
             }
         }
 
         if (location.location == GameLocation.Location.START) {
             handleInput(player, location);
+            return;
+        }
+        else if (location.location == GameLocation.Location.VILLAGE) {
+            Random random = new Random();
+            int randomItemIndex = random.nextInt(VILLAGE_GIFTS.size());
+
+            Item item = (VILLAGE_GIFTS.get(randomItemIndex));
+            System.out.printf("\nYou have been given a %s!\n", item.getName());
+            player.getInventory().addItem(item);
+
+            System.out.print("You had a good rest well and feel healthier than ever!\n");
+            player.restoreHealth(player.getMaxHP() - player.getHP());
+            System.out.printf("Your health is now %d/%d.\n", player.getHP(), player.getMaxHP());
+
+            location.moveNext();
+            System.out.printf("You moved to the %s.\n", location.location.toString().toLowerCase());
             return;
         }
 
@@ -246,7 +287,7 @@ public class Main {
                             \t'stay' - stay in the current location""");
                     break;
                 case "go":
-                    currentLocation.location = currentLocation.location.next();
+                    currentLocation.moveNext();
                     System.out.printf("You moved to the %s.\n", currentLocation.location.toString().toLowerCase());
                     currentLocation.firstEntrance = true;
                     break;
