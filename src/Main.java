@@ -275,7 +275,7 @@ public class Main {
                     }
                 }
                 else {
-                    System.out.printf("There is no item by index %d in your inventory\n", itemIndex);
+                    System.out.printf("There is no item by index %d in your inventory\n", itemIndex+1);
                 }
                 continue;
             }
