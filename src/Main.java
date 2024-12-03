@@ -9,7 +9,7 @@ public class Main {
         new Potion("Chamomile Beer", 1, 3 )
     );
 
-    private final static Map<String, Enemy> enemyPresets = Map.of(
+    private final static Map<String, Enemy> ENEMY_PRESETS = Map.of(
         "rat", new Enemy("Rat", 2, 1, 1, 1),
         "goblin", new Enemy("Goblin", 3, 2, 1, 2),
         "spider", new Enemy("Spider", 4, 2, 2, 3),
@@ -153,8 +153,11 @@ public class Main {
         int enemyChance = 50 + locationOrdinal * 10;
         Enemy currentEnemy = new Enemy(locationEnemies.get( randomChance(enemyChance) ? 0 : 1));
 
-        System.out.printf("The %s is approaching you!\n", currentEnemy.getName());
-        handleFight(player, currentEnemy);
+        // Common location logic: Forest, Cave, Tower
+        Enemy enemy = new Enemy(getLocationEnemy(location));
+
+        System.out.printf("The %s is approaching you!\n", enemy.getName());
+        handleFight(player, enemy);
 
         if (gameIsRunning) {
             System.out.println("""
@@ -163,6 +166,24 @@ public class Main {
                     Type 'help' to see what you can do.""");
             handleInput(player, location);
         }
+    }
+
+    private static void handleBossFight(Player player) {
+        Enemy dragonBoss = ENEMY_PRESETS.get("dragon");
+        handleFight(player, dragonBoss);
+    }
+
+    private static Enemy getLocationEnemy(GameLocation location) {
+        int locationOrdinal = location.location.ordinal();
+        ArrayList<Enemy> locationEnemies = new ArrayList<>();
+
+        for (Enemy enemyPreset : enemyPresets.values()) {
+            if (enemyPreset.getLocation() == locationOrdinal) {
+                locationEnemies.add(new Enemy(enemyPreset));
+            }
+        }
+        int enemyChance = 50 + locationOrdinal * 10;
+        return locationEnemies.get( randomChance(enemyChance) ? 0 : 1);
     }
 
     private static void handleFight(Player player, Enemy enemy) {
