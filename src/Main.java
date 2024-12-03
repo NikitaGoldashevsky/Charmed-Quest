@@ -86,7 +86,7 @@ public class Main {
                     break;
                 case FOREST:
                     System.out.println("""
-                            You slowly make your way through the woods
+                            You slowly make your way through the woods.
                             Sooner or later the endless trees all around will drive you crazy.
                             Suddenly, you see something in the shadows.
                             You grip the stick tighter than ever before.""");
@@ -239,7 +239,6 @@ public class Main {
             gameIsRunning = false;
         }
         sleep();
-        return;
     }
 
     private static void handleAttack(Entity attacker, Entity target) {
@@ -330,7 +329,7 @@ public class Main {
                             Commands:
                             \t'me' - show your state and location
                             \t'inv' - show your inventory
-                            \tuse <1..n>' - use an item by index 'n' from your inventory
+                            \t'use <1..n>' - use an item by index 'n' from your inventory
                             \t'go' - move to the next location
                             \t'stay' - stay in the current location""");
                     break;
