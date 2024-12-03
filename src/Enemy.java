@@ -31,7 +31,7 @@ public class Enemy extends Entity {
         switch (level) {
             case 6:
                 if (Main.randomChance(20)) {
-                    item = new Weapon("Ten-Meter Sword", 7);
+                    item = new Weapon("Ten-Meter Sword", 10);
                     break;
                 }
             case 5:

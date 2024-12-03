@@ -12,10 +12,10 @@ public class Main {
     private final static Map<String, Enemy> ENEMY_PRESETS = Map.of(
         "rat", new Enemy("Rat", 2, 1, 1, 1),
         "goblin", new Enemy("Goblin", 3, 2, 1, 2),
-        "spider", new Enemy("Spider", 4, 2, 2, 3),
-        "ogre", new Enemy("Ogre", 8, 3, 2, 4),
-        "wizard", new Enemy("Wizard", 5, 7, 3, 5),
-        "dragon", new Enemy("Dragon", 10, 4, 3, 6)
+        "spider", new Enemy("Spider", 5, 2, 2, 3),
+        "ogre", new Enemy("Ogre", 9, 3, 2, 4),
+        "wizard", new Enemy("Wizard", 5, 8, 3, 6),
+        "golem", new Enemy("Golem", 12, 5, 3, 6)
     );
 
     private static class GameLocation {
