@@ -16,6 +16,10 @@ public class Player extends Entity {
         damage = damage + increaseAmount;
     }
 
+    public void decreaseDamage(int decreaseAmount) {
+        damage = Math.max(damage - decreaseAmount, 0);
+    }
+
     @Override
     public int getDamage() {
         return super.getDamage() + inventory.getWeapon().getDamage();
