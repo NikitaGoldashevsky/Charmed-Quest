@@ -1,4 +1,4 @@
-public class Entity implements IPrintable {
+public abstract class Entity implements IPrintable {
     protected int hitPoints;
     protected int maxHitPoints;
     protected String name;
