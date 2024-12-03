@@ -18,6 +18,10 @@ public class Main {
         "golem", new Enemy("Golem", 12, 5, 3, 6)
     );
 
+    private final static Map<String, Boss> BOSS_PRESETS = Map.of(
+        "dragon", new Boss("The Elder Dragon", 50, 2, 5, 3)
+    );
+
     private static class GameLocation {
         public enum Location {
             START, FOREST, CAVE, TOWER, END, VILLAGE;
@@ -63,17 +67,7 @@ public class Main {
         GameLocation currentLocation = new GameLocation(GameLocation.Location.START);
 
         while (gameIsRunning) {
-            switch (currentLocation.location) {
-                case VILLAGE:
-                    handleLocation(player, currentLocation);
-                    break;
-                case END:
-                    gameIsRunning = false;
-                    break;
-                default:
-                    handleLocation(player, currentLocation);
-                    break;
-            }
+            handleLocation(player, currentLocation);
         }
         System.out.println("The game ended!");
     }
@@ -111,6 +105,14 @@ public class Main {
                             May it be a dragon? It's scary to even think about it.""");
                     sleep(4);
                     break;
+                case END:
+                    System.out.println("""
+                            Sweaty and tired, you reach the top of the tower.
+                            Your journey may end right here, as the giant dragon is in front of you.
+                            It looks at you with despair. Do you even have any chances against it?
+                            At least, you should try.""");
+                    sleep(4);
+                    break;
                 case VILLAGE:
                     System.out.println("""
                             Your path has led you to a peaceful village!
@@ -141,17 +143,10 @@ public class Main {
             System.out.printf("You moved to the %s.\n", location.location.toString().toLowerCase());
             return;
         }
-
-        int locationOrdinal = location.location.ordinal();
-        ArrayList<Enemy> locationEnemies = new ArrayList<>();
-
-        for (Enemy enemyPreset : enemyPresets.values()) {
-            if (enemyPreset.getLocation() == locationOrdinal) {
-                locationEnemies.add(new Enemy(enemyPreset));
-            }
+        else if (location.location == GameLocation.Location.END) {
+            handleBossFight(player);
+            return;
         }
-        int enemyChance = 50 + locationOrdinal * 10;
-        Enemy currentEnemy = new Enemy(locationEnemies.get( randomChance(enemyChance) ? 0 : 1));
 
         // Common location logic: Forest, Cave, Tower
         Enemy enemy = new Enemy(getLocationEnemy(location));
@@ -169,15 +164,47 @@ public class Main {
     }
 
     private static void handleBossFight(Player player) {
-        Enemy dragonBoss = ENEMY_PRESETS.get("dragon");
-        handleFight(player, dragonBoss);
+        Boss bossEnemy = BOSS_PRESETS.get("dragon");
+        sleep();
+
+        System.out.println("\nThe final fight begins!");
+        System.out.println(player);
+        System.out.println(bossEnemy);
+        sleep();
+
+        while (true) {
+            handleAttack(player, bossEnemy);
+            if (!bossEnemy.isAlive()) break;
+            sleep();
+
+            handleAttack(bossEnemy, player);
+            if (!player.isAlive()) break;
+            sleep();
+
+            bossEnemy.healItself();
+            System.out.printf("%s heals itself for a %d HP!\n", bossEnemy.getName(), bossEnemy.getHealingAmount());
+            bossEnemy.weakenPlayer(player);
+            System.out.printf("%s weakens your power by %d!\n", bossEnemy.getName(), bossEnemy.getWeakeningAmount());
+        }
+
+        if (!bossEnemy.isAlive()) {
+            System.out.printf("\n%s has been defeated!\n", bossEnemy.getName());
+            System.out.println("""
+                    You have beat the game!
+                    Thanks for playing, and have a nice day!
+                    """);
+        }
+        else if (!player.isAlive()) {
+            System.out.println("\nYou have been defeated!");
+        }
+        gameIsRunning = false;
     }
 
     private static Enemy getLocationEnemy(GameLocation location) {
         int locationOrdinal = location.location.ordinal();
         ArrayList<Enemy> locationEnemies = new ArrayList<>();
 
-        for (Enemy enemyPreset : enemyPresets.values()) {
+        for (Enemy enemyPreset : ENEMY_PRESETS.values()) {
             if (enemyPreset.getLocation() == locationOrdinal) {
                 locationEnemies.add(new Enemy(enemyPreset));
             }
