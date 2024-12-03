@@ -4,27 +4,27 @@ public class Main {
     private static boolean gameIsRunning = true;
     private static final int VILLAGE_LOCATION_CHANCE = 35;
     private static final List<Item> VILLAGE_GIFTS = List.of(
-        new Food("Strawberry Pie", 4),
-        new Food("Meatier Stew", 5),
-        new Potion("Chamomile Beer", 1, 3 )
+            new Food("Strawberry Pie", 4),
+            new Food("Meatier Stew", 5),
+            new Potion("Chamomile Beer", 1, 3 )
     );
 
     private final static Map<String, Enemy> ENEMY_PRESETS = Map.of(
-        "rat", new Enemy("Rat", 2, 1, 1, 1),
-        "goblin", new Enemy("Goblin", 3, 2, 1, 2),
-        "spider", new Enemy("Spider", 5, 2, 2, 3),
-        "ogre", new Enemy("Ogre", 9, 3, 2, 4),
-        "wizard", new Enemy("Wizard", 5, 8, 3, 6),
-        "golem", new Enemy("Golem", 12, 5, 3, 6)
+            "rat", new Enemy("Rat", 2, 1, 1, 1),
+            "goblin", new Enemy("Goblin", 3, 2, 1, 2),
+            "spider", new Enemy("Spider", 5, 2, 2, 3),
+            "ogre", new Enemy("Ogre", 9, 3, 2, 4),
+            "wizard", new Enemy("Wizard", 5, 8, 3, 6),
+            "golem", new Enemy("Golem", 12, 5, 3, 6)
     );
 
     private final static Map<String, Boss> BOSS_PRESETS = Map.of(
-        "dragon", new Boss("The Elder Dragon", 50, 2, 5, 3)
+            "dragon", new Boss("The Elder Dragon", 50, 2, 5, 3)
     );
 
     private static class GameLocation {
         public enum Location {
-            START, FOREST, CAVE, TOWER, END, VILLAGE;
+            START, FOREST, CAVE, TOWER, END, VILLAGE
         }
 
         private Location lastLocation;
@@ -35,8 +35,8 @@ public class Main {
         public void moveNext() {
             if (location == Location.VILLAGE) {
                 location = lastLocation;
-                firstEntrance = false;
                 lastLocation = Location.VILLAGE;
+                moveNext();
             }
             else {
                 if (lastLocation != Location.VILLAGE && randomChance(VILLAGE_LOCATION_CHANCE)) {
@@ -69,7 +69,7 @@ public class Main {
         while (gameIsRunning) {
             handleLocation(player, currentLocation);
         }
-        System.out.println("The game ended!");
+        System.out.println("The game ended.");
     }
 
     private static void handleLocation(Player player, GameLocation location) {
@@ -86,7 +86,7 @@ public class Main {
                     break;
                 case FOREST:
                     System.out.println("""
-                            You slowly make your way through the woods
+                            You slowly make your way through the woods.
                             Sooner or later the endless trees all around will drive you crazy.
                             Suddenly, you see something in the shadows.
                             You grip the stick tighter than ever before.""");
@@ -135,9 +135,10 @@ public class Main {
             System.out.printf("\nYou have been given a %s!\n", item.getName());
             player.getInventory().addItem(item);
 
-            System.out.print("You had a good rest well and feel healthier than ever!\n");
+            System.out.print("You have a good rest and feel healthier than ever!\n");
             player.restoreHealth(player.getMaxHP() - player.getHP());
             System.out.printf("Your health is now %d/%d.\n", player.getHP(), player.getMaxHP());
+            System.out.println("You leave the village.\n");
 
             location.moveNext();
             System.out.printf("You moved to the %s.\n", location.location.toString().toLowerCase());
@@ -239,7 +240,6 @@ public class Main {
             gameIsRunning = false;
         }
         sleep();
-        return;
     }
 
     private static void handleAttack(Entity attacker, Entity target) {
@@ -330,7 +330,7 @@ public class Main {
                             Commands:
                             \t'me' - show your state and location
                             \t'inv' - show your inventory
-                            \tuse <1..n>' - use an item by index 'n' from your inventory
+                            \t'use <1..n>' - use an item by index 'n' from your inventory
                             \t'go' - move to the next location
                             \t'stay' - stay in the current location""");
                     break;
