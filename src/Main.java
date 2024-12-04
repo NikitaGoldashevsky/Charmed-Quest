@@ -60,7 +60,7 @@ public class Main {
     }
 
     private static void handleGame() {
-        Player player = new Player(4, 10, 3);
+        Player player = new Player(4, 10, 0);
         player.getInventory().addItem(new Weapon("Heavy stick", 2));
         player.getInventory().addItem(new Food("Apple", 3));
 

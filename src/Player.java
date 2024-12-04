@@ -4,7 +4,7 @@ public class Player extends Entity {
     private final Inventory inventory;
 
     public Player(int hitPoints, int maxHitPoints, int damage) {
-        super("Hero", hitPoints, maxHitPoints, 0);
+        super("Hero", hitPoints, maxHitPoints, damage);
         inventory = new Inventory();
     }
 
@@ -27,7 +27,7 @@ public class Player extends Entity {
 
     @Override
     public String toString() {
-        return String.format("%s (HP: %d/%d, power: %d, overall damage: %d)", getName(), getHP(), getMaxHP(), damage, getDamage());
+        return String.format("%s (HP: %d/%d, power: %d, overall damage: %d)", getName(), getHP(), getMaxHP(), super.damage, getDamage());
     }
 
     public Inventory getInventory() {
