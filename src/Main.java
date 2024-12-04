@@ -210,8 +210,10 @@ public class Main {
                 locationEnemies.add(new Enemy(enemyPreset));
             }
         }
-        int enemyChance = 50 + locationOrdinal * 10;
-        return locationEnemies.get( randomChance(enemyChance) ? 0 : 1);
+
+        Random random = new Random();
+        int randomIndex = random.nextInt(locationEnemies.size());
+        return locationEnemies.get(randomIndex);
     }
 
     private static void handleFight(Player player, Enemy enemy) {
