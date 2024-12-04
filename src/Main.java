@@ -18,8 +18,10 @@ public class Main {
             "golem", new Enemy("Golem", 12, 5, 3, 6)
     );
 
-    private final static Map<String, Boss> BOSS_PRESETS = Map.of(
-            "dragon", new Boss("The Elder Dragon", 50, 2, 5, 3)
+    private final static List<Boss> BOSS_PRESETS = List.of(
+            new Boss("The Elder Dragon", 100, 3, 6, 4),
+            new Boss("The Vampire", 60, 2, 15, 1),
+            new Boss("The Evil Mage", 40, 4, 2, 18)
     );
 
     private static class GameLocation {
@@ -165,7 +167,7 @@ public class Main {
     }
 
     private static void handleBossFight(Player player) {
-        Boss bossEnemy = BOSS_PRESETS.get("dragon");
+        Boss bossEnemy = getBoss();
         sleep();
 
         System.out.println("\nThe final fight begins!");
@@ -214,6 +216,12 @@ public class Main {
         Random random = new Random();
         int randomIndex = random.nextInt(locationEnemies.size());
         return locationEnemies.get(randomIndex);
+    }
+
+    private static Boss getBoss() {
+        Random random = new Random();
+        int randomIndex = random.nextInt(BOSS_PRESETS.size());
+        return new Boss(BOSS_PRESETS.get(randomIndex));
     }
 
     private static void handleFight(Player player, Enemy enemy) {
