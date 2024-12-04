@@ -18,8 +18,10 @@ public class Main {
             "golem", new Enemy("Golem", 12, 5, 3, 6)
     );
 
-    private final static Map<String, Boss> BOSS_PRESETS = Map.of(
-            "dragon", new Boss("The Elder Dragon", 50, 2, 5, 3)
+    private final static List<Boss> BOSS_PRESETS = List.of(
+            new Boss("The Dragon", 100, 3, 6, 4),
+            new Boss("The Vampire", 60, 2, 15, 1),
+            new Boss("The Elder Mage", 40, 4, 2, 18)
     );
 
     private static class GameLocation {
@@ -101,16 +103,17 @@ public class Main {
                 case TOWER:
                     System.out.println("""
                             You have come to entrance of the tallest tower you have ever seen!
-                            You see a giant creature sitting at the top of it.
-                            May it be a dragon? It's scary to even think about it.""");
+                            The legends say that terrible hazards awaits those dare to get atop.
+                            And who is there right now? A vampire? A powerful mage?
+                            It may be even something worse. Something flying and fire-breathing.
+                            It's scary to even think about it.""");
                     sleep(4);
                     break;
                 case END:
-                    System.out.println("""
+                    System.out.print("""
                             Sweaty and tired, you reach the top of the tower.
-                            Your journey may end right here, as the giant dragon is in front of you.
-                            It looks at you with despair. Do you even have any chances against it?
-                            At least, you should try.""");
+                            Your journey may end right here, but you've already gone too far.
+                            """);
                     sleep(4);
                     break;
                 case VILLAGE:
@@ -165,9 +168,10 @@ public class Main {
     }
 
     private static void handleBossFight(Player player) {
-        Boss bossEnemy = BOSS_PRESETS.get("dragon");
+        Boss bossEnemy = getBoss();
         sleep();
 
+        System.out.printf("%s is in front of you.\n", bossEnemy.getName());
         System.out.println("\nThe final fight begins!");
         System.out.println(player);
         System.out.println(bossEnemy);
@@ -214,6 +218,12 @@ public class Main {
         Random random = new Random();
         int randomIndex = random.nextInt(locationEnemies.size());
         return locationEnemies.get(randomIndex);
+    }
+
+    private static Boss getBoss() {
+        Random random = new Random();
+        int randomIndex = random.nextInt(BOSS_PRESETS.size());
+        return new Boss(BOSS_PRESETS.get(randomIndex));
     }
 
     private static void handleFight(Player player, Enemy enemy) {

@@ -8,6 +8,12 @@ public class Boss extends Entity {
         this.weakeningAmount = weakeningAmount;
     }
 
+    public Boss(Boss other) {
+        super(other.name, other.maxHitPoints, other.damage);
+        this.healingAmount = other.healingAmount;
+        this.weakeningAmount = other.weakeningAmount;
+    }
+
 //    public void setHealingAmount(int healingAmount) {
 //        this.healingAmount = healingAmount;
 //    }
